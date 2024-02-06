@@ -699,7 +699,7 @@ abstract class Data extends HasId with NamedComponent with SourceInfoDoc {
     * @param that the Data to connect from
     * @group connection
     */
-  final def :=(that: => Data)(implicit sourceInfo: SourceInfo): Unit = {
+  def :=(that: => Data)(implicit sourceInfo: SourceInfo): Unit = {
     prefix(this) {
       this.connect(that)(sourceInfo)
     }
