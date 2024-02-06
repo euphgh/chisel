@@ -50,6 +50,22 @@ sealed abstract class Bits(private[chisel3] val width: Width) extends Element wi
   // Only used for in a few cases, hopefully to be removed
   private[chisel3] def cloneTypeWidth(width: Width): this.type
 
+  override final def :=(that: => Data)(implicit sourceInfo: SourceInfo, connectionCompileOptions: CompileOptions): Unit = {
+    if (this.isWidthKnown && that.isWidthKnown) {
+      if (this.getWidth != that.getWidth)
+        Builder.warning(s"assign left's width(${this.getWidth}) is different with right's width(${that.getWidth})")
+    }
+    else {
+      if (!this.isWidthKnown)
+        Builder.warning(s"assign left's width is unknow"
+        )
+
+      if (!that.isWidthKnown)
+        Builder.warning(s"assign right's width is unknow")
+    }
+    super.:=(that)
+  }
+
   def cloneType: this.type = cloneTypeWidth(width)
 
   /** Tail operator
